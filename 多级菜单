@@ -1,0 +1,29 @@
+  ID   Name   PID
+  1    ZOE     0
+  2    ERIC    0
+  3    eric    2
+  4    zoe     1
+  list=[{ID:"1",Name:"ZOE",PID:"0"},{ID:"2",Name:"ERIC",PID:"0"},{ID:"3",Name:"eric",PID:"2"},{ID:"4",Name:"zoe",PID:"1"}]
+  
+  private list_to_tree(list) {
+    var tree = [];//最终树结构
+    var refer = [];
+    //根据ID组织数据源
+    for (var i = 0; i < list.length; i++) {
+      refer[list[i].ID] = list[i];
+    }
+    //1,先找出PID为0的根节点 2,通过PID,在refer数组中找出有child 节点的选项，PID=有child节点的ID
+    for (var i = 0; i < list.length; i++) {
+      var parentId = list[i].PID;
+      if (0 == parentId) {
+        tree.push(list[i]);
+      } else {
+        if (refer[parentId]) {
+          let parent = refer[parentId];
+          if (!parent.child) parent.child = [];
+          parent.child.push(list[i]);
+        }
+      }
+    }
+    return tree;
+  }
