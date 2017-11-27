@@ -3,6 +3,11 @@
 $ keytool -genkey -v -keystore com.hanwintech.yhyii.keystore -alias com.hanwintech.yhyii -keyalg RSA -keysize 2048 -validity 10000  
 注意：  
 请使用你应用的名字来替代com.hanwintech.app.dyh，这个命令可以生成一个新文件，在本示例中为com.hanwintech.app.dyh.keystore。在应用的整个生命周期中将重复使用同一个keystore，请保存好它。
+JKS 密钥库使用专用格式。建议使用 
+"keytool -importkeystore -srckeystore com.hanwintech.yhyii.keystore -destkeystore com.hanwintech.yhyii.keystore -deststoretype pkcs12"1
+迁移到行业标准格式 PKCS12。
+
+
 
 
 ### 02.使用Cordova编译应用。使用build命令编译一个应用的发布版本：
