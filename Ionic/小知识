@@ -1,0 +1,35 @@
+Ionic2 "WARNING: sanitizing HTML stripped some content" when no content stripped
+
+Web应用程序的安全涉及到很多方面。针对常见的漏洞和攻击，比如跨站脚本攻击，Angular提供了一些内置的保护措施。为了系统性的防范XSS问题，Angular默认把所有值都当做不可信任的。 当值从模板中以属性（Property）、DOM元素属性（Attribte)、CSS类绑定或插值表达式等途径插入到DOM中的时候， Angular将对这些值进行无害化处理（Sanitize），对不可信的值进行编码。 
+Angular定义了四个安全环境 - HTML，样式，URL，和资源URL：
+
+HTML：值需要被解释为HTML时使用，比如当绑定到innerHTML时。 
+样式：值需要作为CSS绑定到style属性时使用。 
+URL：值需要被用作URL属性时使用，比如<a href>。 
+资源URL：值需要被当做代码而加载并执行时使用，比如<script src>中的URL。
+
+Angular会对前三项中种不可信的值进行无害化处理。但Angular无法对第四种资源URL进行无害化，因为它们可能包含任何代码。在开发模式下， 如果Angular在进行无害化处理时需要被迫改变一个值，它就会在控制台上输出一个警告。
+
+"WARNING: sanitizing HTML stripped some content" when no content stripped
+1
+有时候，应用程序确实需要包含可执行的代码，比如使用URL显示<iframe>，或者构造出有潜在危险的URL。 为了防止在这种情况下被自动无害化，你可以告诉Angular：我已经审查了这个值，检查了它是怎么生成的，并确信它总是安全的。
+
+注入DomSanitizer服务，然后调用下面的方法之一，你就可以把一个值标记为可信任的。
+
+bypassSecurityTrustScript
+bypassSecurityTrustUrl
+bypassSecurityTrustResourceUrl
+
+例如要使用innnerHtml：
+
+ts中：
+import { DomSanitizer } from '@angular/platform-browser';
+constructor(private sanitize:DomSanitizer) { }
+
+tempHtml = '<div>
+<img src="assets/images/toast/tip.png" 
+style="width:2.5rem;height:2.5rem;vertical-align:middle;" alt="">
+</div>';
+sanitizeHtml = this.sanitize.bypassSecurityTrustHtml(tempUrl)
+html中：
+<div [innnerHtml]="sanitizeHtml "></div>
